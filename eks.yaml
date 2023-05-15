@@ -1,0 +1,18 @@
+pipeline {
+  agent any
+  
+  environment {
+    AWS_DEFAULT_REGION = 'ap-south-1'
+    EKS_CLUSTER_NAME = 'my-eks-cluster'
+  }
+  
+  stages {
+    stage('Create EKS cluster') {
+      steps {
+        withAWS(region: 'ap-south-1', credentials: 'aws-creds') {
+          sh 'eksctl create cluster --name ${EKS_CLUSTER_NAME} --version 1.18 --region ${AWS_DEFAULT_REGION}'
+        }
+      }
+    }
+  }
+}
