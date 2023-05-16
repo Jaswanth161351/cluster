@@ -1,7 +1,5 @@
 pipeline {
   agent any
-  environment {
-  }
   stages {
     stage('Create EKS cluster') {
       steps {
