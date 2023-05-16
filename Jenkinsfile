@@ -2,7 +2,7 @@ pipeline{
   agent any
   stages{
     stage("Manage EKS cluster"){
-      step{
+      steps{
         sh "eksctl create cluster -f cluster.yaml"
       }
     }
