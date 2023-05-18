@@ -1,0 +1,32 @@
+pipeline {
+	agent any
+	environment {
+		AWS_DEFAULT_REGION = 'ap-south-1'
+		CLUSTER_NAME = 'ourcluster'
+	}
+
+    
+	stages {
+		stage('Git Checkout'){
+		    steps {
+		        git branch: 'main', credentialsId: 'github', url: 'https://github.com/Jaswanth161351/cluster/'
+		    }
+		}
+		
+		stage('Create Cluster') {
+			steps {
+				withCredentials([[
+          $class: 'AmazonWebServicesCredentialsBinding',
+          accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+          credentialsId: 'aws-credentials',
+          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        ]]) {
+					sh '''
+					     eksctl create cluster -f cluster.yaml
+						'''
+				}
+			}
+		}
+	}
+}
+
